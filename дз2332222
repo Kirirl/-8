@@ -1,0 +1,41 @@
+connection = sqlite3.connect('FruitBasket.db')
+cursor = connection.cursor()
+
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS Fruits (
+    ID INTEGER PRIMARY KEY AUTOINCREMENT,
+    FruitName TEXT NOT NULL,
+    Color TEXT NOT NULL
+)
+''')
+cursor.executemany('''
+INSERT INTO Fruits (FruitName, Color)
+VALUES (?, ?)
+''', [
+    ("Яблуко", "Червоне"),
+    ("Банан", "Жовтий"),
+    ("Апельсин", "Помаранчевий")
+])
+cursor.execute('''
+UPDATE Fruits
+SET Color = "Зелене"
+WHERE FruitName = "Яблуко"
+''')
+cursor.execute('''
+SELECT * FROM Fruits
+WHERE Color = "Жовтий"
+''')
+yellow_fruits = cursor.fetchall()
+cursor.execute('''
+SELECT * FROM Fruits
+''')
+all_fruits = cursor.fetchall()
+connection.commit()
+connection.close()
+print("Жовті фрукти:")
+for fruit in yellow_fruits:
+    print(fruit)
+print("\nВсі фрукти:")
+for fruit in all_fruits:
+    print(fruit)
+
